@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  coffeefeed:
+    image: sveltekit-ts-dev
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5173"
+    volumes:
+      - ./src:/var/www/html/src
+      - ./static:/var/www/html/static
+      - ./vite.config.ts:/var/www/html/vite.config.ts
+      - ./tsconfig.json:/var/www/html/tsconfig.json
+      - ./svelte.config.ts:/var/www/html/svelte.config.ts
+      - ./postcss.config.cjs:/var/www/html/postcss.config.cjs
+    command: npm run dev
+    environment:
+      - PORT=5173
+      - HOST=0.0.0.0
+      - REDIS_URL=redis:6379
+  redis:
+    image: "redis:alpine"
